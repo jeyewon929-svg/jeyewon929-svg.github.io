@@ -1,0 +1,311 @@
+/* ==========================================================================
+   CSS-Only Multi-Filter Gallery (순수 CSS 다중선택 4x3 필터링 갤러리)
+   ========================================================================== */
+
+/* 1. Reset & Global Variables */
+:root {
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.6;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+/* 2. Layout Container */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* 3. Header */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.filter-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+}
+
+.hint-badge {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* 4. Checkbox Triggers (화면 숨김) */
+input[type="checkbox"].filter-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 5. Filter Navigation Buttons */
+.filter-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background-color: var(--card-bg);
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-color);
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 체크 표시 아이콘 박스 */
+.btn-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid #cbd5e1;
+  background-color: #f8fafc;
+  transition: var(--transition);
+  font-size: 0.75rem;
+}
+
+.filter-btn:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+/* 6. 다중선택 체크박스 활성화 상태 스타일 */
+#chk-nature:checked ~ .filter-nav .btn-nature,
+#chk-city:checked ~ .filter-nav .btn-city,
+#chk-animal:checked ~ .filter-nav .btn-animal {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+  transform: translateY(-2px);
+}
+
+#chk-nature:checked ~ .filter-nav .btn-nature .btn-check,
+#chk-city:checked ~ .filter-nav .btn-city .btn-check,
+#chk-animal:checked ~ .filter-nav .btn-animal .btn-check {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: var(--primary-color);
+}
+
+#chk-nature:checked ~ .filter-nav .btn-nature .btn-check::after,
+#chk-city:checked ~ .filter-nav .btn-city .btn-check::after,
+#chk-animal:checked ~ .filter-nav .btn-animal .btn-check::after {
+  content: '✓';
+  font-weight: 800;
+}
+
+/* 7. Gallery Grid (4 * 3 배열) */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 데스크톱 기본 4열 */
+  gap: 24px;
+}
+
+/* 8. Gallery Item Card */
+.gallery-item {
+  display: none; /* 필터링 기본: 기본 숨김 후 조건부 표시 */
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.gallery-item:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3; /* 4:3 비율의 고정 비율 이미지 */
+  overflow: hidden;
+  background-color: #e2e8f0;
+}
+
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-item:hover .img-wrapper img {
+  transform: scale(1.08);
+}
+
+/* Overlay & Text Information */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  color: #ffffff;
+  opacity: 0.95;
+  transition: var(--transition);
+}
+
+.badge {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.overlay h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   9. Pure CSS Multi-Filter Logic (순수 CSS 다중선택 필터링)
+   ========================================================================== */
+
+/* (1) 아무것도 체크되지 않았을 때 -> 전체 12개 아이템 표시 (기본 상태) */
+.container:not(:has(input[type="checkbox"]:checked)) .gallery-item {
+  display: block;
+}
+
+/* (2) 카테고리 체크 시 -> 해당 카테고리 아이템 표시 (다중 선택 지원) */
+.container:has(#chk-nature:checked) .gallery-item.nature,
+#chk-nature:checked ~ .gallery-grid .gallery-item.nature {
+  display: block;
+}
+
+.container:has(#chk-city:checked) .gallery-item.city,
+#chk-city:checked ~ .gallery-grid .gallery-item.city {
+  display: block;
+}
+
+.container:has(#chk-animal:checked) .gallery-item.animal,
+#chk-animal:checked ~ .gallery-grid .gallery-item.animal {
+  display: block;
+}
+
+/* 등장 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   10. Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
