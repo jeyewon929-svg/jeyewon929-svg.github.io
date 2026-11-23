@@ -1,0 +1,296 @@
+@charset "UTF-8";
+
+/*======== RESET CSS =========*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    display: block;
+    text-decoration: none;
+    color: #000;
+}
+
+/*======== HEADER =========*/
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    background: plum;
+    padding: 0 24px;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+header a {
+    transition: color 0.3s;
+}
+
+header a:hover {
+    color: red;
+}
+/*======== MAIN =========*/
+main {
+    width: 100%;
+    background: aquamarine;
+}
+
+
+
+/* video-box */
+
+.video-box {
+    width: 100%;
+    max-width: 100%;
+
+    /*
+           높이+ overflow hidden :원하는 높이에서 자름
+           height:200px:
+           overflow:hidden;
+            */
+}
+
+
+.video-box video {
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+
+/* profile-box */
+#card {
+    width: 300px;
+    background: #fff;
+    padding: 24px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#card img {
+    width: 80%;
+}
+
+#card p {
+    padding: 20px 0;
+    font-family: "Playwrite BE WAL Guides", cursive;
+}
+
+#card a {
+    display: block;
+    text-decoration: none;
+    width: 80%;
+    height: 50px;
+    background: #afdee4;
+    color: #000000;
+    font-weight: bold;
+    line-height: 50px;
+    margin: 0 auto;
+    font-family: "Roboto", sans-serif;
+}
+
+/* portfolio-box */
+.portfolio-box {
+    width: 100%;
+    padding: 24px;
+}
+.portfolio-box .photo-list {
+   display: flex;
+   gap: 16px;
+   cursor: pointer;
+}
+.portfolio-box .photo-list li {
+   flex: 1;
+}
+.portfolio-box .photo-list li a {
+   display: block;
+   width: 100%;
+   height: 100%;
+}
+.portfolio-box .photo-list li img {
+   width: 100%;
+   height: auto;
+   display: block;
+   border-radius: 4px;
+}
+.modal {
+   display:none;
+   position: fixed;
+   align-items: center;
+   justify-content: center;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, .8);
+   z-index: 1000;
+   padding: 16px;
+}
+.modal:target {
+   display: flex;
+}
+
+.modal-content {
+   position: relative;
+   background: #fff;
+   padding: 40px;
+   border-radius: 4px;
+   overflow: auto;
+   text-align: center;
+   width: 90%;
+   max-width: 600px;
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* 모달이 활성화(:target)되었을 때 modal-content hover 효과 */
+.modal:target .modal-content:hover {
+   transform: scale(1.02);
+   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+.modal-content img {
+   width: 100%;
+   height: auto;
+}
+.close-btn {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   color: #333;
+   font-size: 22px;
+   font-weight:bold;
+   text-decoration: none;
+}
+
+
+
+/* slide-box */
+.slide-box {
+   position: relative;
+   width:60%;
+   aspect-ratio: 1/1;
+   max-width: 500px;
+   margin:48px auto;
+}
+.slide-box ul {
+   position:relative;
+}
+.slide-box li {
+   position:absolute;
+   top:0;
+   left:0;
+   width:100%;
+   opacity: 0;
+   animation: fade 15s infinite;
+}
+.slide-box li img {
+   width:100%;
+
+}
+
+
+@keyframes fade {
+   0% { opacity: 0; }
+   10% { opacity: 1; }
+   40% { opacity: 1; }
+   50% { opacity: 0; }
+   100% { opacity: 0; }
+}
+.slide-box ul li:nth-child(1) {
+   animation-delay: 0s;
+}
+.slide-box ul li:nth-child(2) {
+   animation-delay: 5s;
+}
+.slide-box ul li:nth-child(3) {
+   animation-delay: 10s;
+}
+
+
+
+
+
+/*======== FOOTER =========*/
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    background: springgreen;
+    padding: 0 24px;
+}
+
+footer ul {
+    display: flex;
+    gap: 30px;
+}
+
+/*======== RESPONSIVE MEDIA QUERIES (반응형 웹) =========*/
+
+/* [태블릿] 해상도 1024px 이하 */
+@media screen and (max-width: 1024px) {
+    .slide-box {
+        width: 75%;
+    }
+}
+
+/* [모바일] 해상도 767px 이하 */
+@media screen and (max-width: 767px) {
+    /* 헤더 */
+    header {
+        height: auto;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nav {
+        gap: 20px;
+    }
+
+    /* photo-list: 모바일 버전일 때 세로 1개씩 출력 */
+    .portfolio-box .photo-list {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .portfolio-box .photo-list li {
+        width: 100%;
+    }
+
+    /* 프로필 카드 */
+    #card {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    /* 슬라이드 박스 */
+    .slide-box {
+        width: 90%;
+        margin: 32px auto;
+    }
+
+    /* 모달 */
+    .modal-content {
+        padding: 30px 20px;
+        width: 95%;
+    }
+
+    /* 푸터 */
+    footer {
+        height: auto;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
